@@ -18,7 +18,7 @@ function Specials() {
       <div className="cards">
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src={salad} />
-          <Card.Body>
+          <Card.Body style={{color: '#000'}}>
             <Card.Title>Greek Salad</Card.Title>
             <Card.Text>
               The famous greek salad of crispy lettuce, peppers, olives and our
@@ -31,7 +31,7 @@ function Specials() {
 
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src={bruchetta} />
-          <Card.Body>
+          <Card.Body style={{color: '#000'}}>
             <Card.Title>Bruschetta</Card.Title>
             <Card.Text>
               Our Bruschetta is made from homemade grilled bread that has been
@@ -44,7 +44,7 @@ function Specials() {
 
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src={dessert} />
-          <Card.Body>
+          <Card.Body style={{color: '#000'}}>
             <Card.Title>Lemon Cake</Card.Title>
             <Card.Text>
               This comes straight from grandma’s recipe book, every last
