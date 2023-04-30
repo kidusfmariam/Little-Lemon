@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../css/booking.css";
+import "./booking.css";
 const BookingForm = ({
   bookingData,
   setBookingData,
