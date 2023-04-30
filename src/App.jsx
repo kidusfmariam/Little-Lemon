@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import "./App.css";
+import Home from "./components/Home";
+import BookingPage from "./components/BookingPage";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useReducer, useState } from "react";
+import { fetchAPI, submitAPI } from "./API/Api";
+import ConfirmedBooking from "./components/ConfirmedBooking";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [bookingData, setBookingData] = useState({
+    date: " ",
+    time: " ",
+    guests: " ",
+    occasion: " ",
+  });
+
+  
+  const today = new Date();
+
+  const init = { times: fetchAPI(today) };
+
+  const [availableTimes, setAvailableTimes] = useReducer(updateTimes, init);
+
+  const submitForm = () => {
+    const res = submitAPI(bookingData);
+    if (res === true) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  function initializeTimes() {
+    setAvailableTimes({ type: "init" });
+  }
+
+  function updateTimes(state, action) {
+    if (action.type === "init") {
+      return { times: fetchAPI(today) };
+    }
+    if (action.type === "update_times") {
+      let selectedBookingDate = new Date(bookingData.date);
+      let newTimes = fetchAPI(selectedBookingDate).filter(
+        (time) => time !== "17:00"
+      );
+      return { times: newTimes };
+    }
+    throw Error("Unknown action.");
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+      <Route index element={<Home bookingData={bookingData} />} />
+        <Route
+          path="reservations"
+          element={
+            <BookingPage
+              bookingData={bookingData}
+              setBookingData={setBookingData}
+              availableTimes={availableTimes}
+              setAvailableTimes={setAvailableTimes}
+              submitForm={submitForm}
+            />
+          }
+        />
+
+        <Route
+          path="confirmation"
+          element={<ConfirmedBooking bookingData={bookingData} />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
